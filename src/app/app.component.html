@@ -1,0 +1,74 @@
+<modal (onClose)="findData(0); sort();" #findmodal>
+   <modal-header [show-close]="true">
+       <h4 class="modal-title">Search</h4>
+   </modal-header>
+   <modal-body>
+      Von: <ngb-datepicker view-value="DD.MM.YYYY" [(ngModel)]="dateFrom" style="display: inline-block;"></ngb-datepicker>
+      Bis: <ngb-datepicker view-value="DD.MM.YYYY" [(ngModel)]="dateTill" style="display: inline-block;"></ngb-datepicker>
+      <input type="checkbox" [(ngModel)]="clearData">Clear current data
+   </modal-body>
+   <modal-footer>
+     <button type="button" class="btn btn-default" data-dismiss="modal" (click)="findmodal.dismiss()">Close</button>
+     <button type="button" class="btn btn-primary" autofocus (click)="findmodal.close()">Load</button>
+   </modal-footer>
+</modal>
+<modal (onClose)="loadSessionData($event)" #loadmodal>
+   <modal-header [show-close]="true">
+       <h4 class="modal-title">Load Session Data</h4>
+   </modal-header>
+   <modal-body>
+       <ul>
+         <li *ngFor="let session of sessions">
+             <a href="#" (click)="$event.preventDefault(); sessionname=session.name; modalSelected = session">{{ session.name }} ({{session.date  | date: "dd.MM.yy HH:mm:ss"}}), Logs: {{session.logcount}}</a> <a (click)="deleteSession(session.name)">Delete</a>
+         </li>
+       </ul>
+       <span *ngIf="modalSelected">Selected: <b>{{modalSelected.name}}</b></span>
+   </modal-body>
+   <modal-footer>
+     <button type="button" class="btn btn-default" data-dismiss="modal" (click)="loadmodal.dismiss()">Close</button>
+     <button type="button" class="btn btn-primary" autofocus (click)="loadmodal.close()">Load</button>
+   </modal-footer>
+</modal>
+<modal (onClose)="saveSessionData($event)" #savemodal>
+   <modal-header [show-close]="true">
+       <h4 class="modal-title">Save Session Data</h4>
+   </modal-header>
+   <modal-body>
+      Existing Sessions:
+       <ul>
+           <li *ngFor="let session of sessions">
+               <a href="#" (click)="$event.preventDefault(); modalSelected = session">{{  session.name }} ({{session.date  | date: "dd.MM.yy HH:mm:ss"}}), Logs: {{session.logcount}}</a> <a (click)="deleteSession(session.name)">Delete</a>
+           </li>
+       </ul>
+       <input type='text' [(ngModel)]="sessionname">
+   </modal-body>
+   <modal-footer>
+     <button type="button" class="btn btn-default" data-dismiss="modal" (click)="savemodal.dismiss()">Close</button>
+     <button type="button" class="btn btn-primary" autofocus (click)="savemodal.close()">Save</button>
+   </modal-footer>
+</modal>
+<div class="header">
+  <button (click)="loadmodal.open()">Load</button>
+  <button (click)="savemodal.open()">Save</button>
+  <button (click)="findmodal.open()">Find</button>
+  <button (click)="clear()">Clear</button>
+  <div class="active-filters" *ngIf="filter">
+	  Aktive Filter:
+	  <div *ngIf="filter.message.length > 0"> Volltextsuche: {{filter.message}}</div>
+	  <div *ngIf="filter.customers.length > 0">Customers: {{filter.customers}}</div>
+	  <div *ngIf="filter.applications.length > 0">Applications: {{filter.applications}}</div>
+	  <div *ngIf="filter.environments.length > 0">Environments: {{filter.environments}}</div>
+	  <div *ngIf="filter.logfiles.length > 0">Logfiles: {{filter.logfiles}}</div>
+	  <div *ngIf="filter.level.length > 0">Level: {{filter.level}}</div>
+  </div>
+  <span style="float: right;">{{allLogs.length}}</span>
+</div>
+<div class="navigation">
+  <app-navigation (patternchanged)="highlightPattern=$event"></app-navigation>
+</div>
+<div class="content" style="width: 100%; padding-right: 30px;">
+  <app-table [highlightPattern]="highlightPattern"></app-table>
+</div>
+<app-slidein heading="Charts">
+	<app-chart></app-chart>
+</app-slidein>

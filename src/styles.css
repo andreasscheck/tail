@@ -1,0 +1,183 @@
+/* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+
+div.active-filters {
+	display: inline-block;
+}
+
+div.active-filters > div {
+	font-size: 10px;
+}
+
+div.customer .name {
+   text-indent: 20px;
+   max-width: 200px;
+   display: inline-block;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+   overflow: hidden;
+}
+
+div.customer .name.BMW {
+   background: transparent url('img/bmw.png') 0 center/16px 16px no-repeat;
+}
+
+div.customer .name.Mueller {
+   background: transparent url('img/mueller.png') 0 center/16px 16px no-repeat;
+}
+
+div.customer .env-status {
+   font-weight: bold;
+   float: right;
+}
+
+div.customer .Online.env-status {
+  color: green !important;
+}
+
+div.customer .Offline.env-status {
+  color: red !important;
+}
+
+.slidein  .content.isCollapsed {
+  display: none;
+}
+.slidein  .content.notCollapsed {
+  display: block;
+  height: 300px;
+}
+
+.slidein {
+  position: fixed;
+  z-index: 10000;
+  width: 100%;
+  bottom: 0px;
+}
+
+.slidein .clickhandler {
+  text-align: center;
+  cursor: pointer;
+  background-color: lightgray;
+  width: 100%;
+  height: 20px;
+}
+
+.slidein .content {
+  width: 100%;
+  background-color: white;
+}
+
+.form-control {
+  height: 25px !important;
+  margin-bottom: 5px;
+}
+
+a {
+  cursor: pointer;
+}
+
+body {
+  position: absolute;
+  font-size: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+td.customer > div {
+   display: table-cell;
+   font-size: 8px;
+}
+td.customer .logo {
+   width: 30px;
+   height: 24px;
+}
+
+td.customer.Mueller .logo {
+  background: url('img/mueller.png') no-repeat top left/24px 24px;
+}
+
+td.customer.BMW .logo {
+  background: url('img/bmw.png') no-repeat top left/24px 24px;
+}
+
+div.header {
+  position: absolute;
+  z-index: 10000;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 40px;
+}
+div.header button {
+	vertical-align: top;
+}
+
+div.navigation {
+    position: absolute;
+    z-index: 10;
+    top: 60px;
+    left: 0px;
+    bottom: 0px;
+    width: 280px;
+    margin: 0px 10px 0 10px;
+    overflow: auto;
+}
+
+app-root > div.content {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 60px 0 0 300px;
+    overflow: auto;
+    height: 100%;
+}
+
+table {
+  font-size: 12px;
+}
+
+table td {
+    padding: 5px !important;
+}
+td.customer {
+}
+td.message {
+  max-width: 700px;
+}
+
+td.message div {
+  white-space: pre-line;
+}
+
+div.system-monitor {
+  display: table;
+}
+
+div.system-monitor div.system {
+  display: table-row;
+}
+div.system-monitor div.system div.label {
+  font-size: 12px;
+  color: black;
+  text-align: left;
+}
+
+div.system-monitor div.system div.label,
+div.system-monitor div.system div.system-status {
+  display: table-cell;
+}
+
+div.heading h4 {
+  margin: 0px;
+}
+div.heading {
+  width: 100%;
+  margin-bottom: 5px;
+  border-bottom: 2px solid black;
+}
+
+.highlight {
+	color: red;
+}

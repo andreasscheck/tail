@@ -1,0 +1,37 @@
+<button (click)="scrollDown()">Down</button>
+<button (click)="scrollUp()">Up</button>
+<button (click)="scrollTop()">Top</button>
+<app-debounced-input returntype="int" delay="500" placeholder="Max entries..." [inputValue]="limit" (value)="limit = $event"></app-debounced-input>
+{{ (offset === -1 ? tableData.length - limit : offset) | mathmax: {alt: 0} }} ... {{offset === -1 ? tableData.length : offset + limit}} von {{tableData.length}}
+<table class="table table-striped" style="width: 100%;">
+  <thead>
+      <tr>
+        <th style="overflow: hidden; width: 120px;"></th>
+        <th style="width: 70px;">Date</th>
+        <th style="width: 50px;">Level</th>
+        <th style="min-width: 400px;">Message</th>
+        <th style="width: 200px;" *ngIf="viewConfig.logger">Loggername</th>
+        <th *ngIf="viewConfig.application">Application</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="tableData.length == 0"><td colspan="6" style="text-align: center;">No data so far ...</td></tr>
+    <tr *ngFor="let log of tableData | limitTo: {'limit': limit, 'offset': offset}">
+        <td style="width: 120px; overflow: hidden;" class="customer" [ngClass]="log.environment.customer">
+           <div class="logo"></div>
+           <div>
+              <span style="font-weight: bold;">{{log.environment.name}}</span><br />
+              <span>{{log.environment.application}}</span><br />
+              <span>{{log.application}}</span>
+           </div>
+        </td>
+        <td style="width: 70px; overflow: hidden;">{{log.date | formatDate : "DD.MM.YYYY HH:mm:ss"}}</td>
+        <td style="width: 50px; overflow: hidden;" [ngClass]="log.level">{{log.level}} </td>
+        <td style="min-width: 400px;" class="message">
+          <div [innerHTML]="log.message | highlight: highlightPattern" style="overflow: auto;"></div>
+        </td>
+        <td style="width: 200px" *ngIf="viewConfig.logger">{{log.logger | package}}</td>
+        <td *ngIf="viewConfig.application">{{log.application}}</td>
+    </tr>
+  </tbody>
+</table>`

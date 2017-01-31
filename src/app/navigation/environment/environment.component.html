@@ -1,0 +1,25 @@
+<div style="border-bottom: 1px solid black; cursor:pointer;" (click)="collapsed=!collapsed">
+    <div class="customer">
+      <span class="name" [ngClass]="env.customer" title="{{env.name}} - {{env.application}}">{{env.name}} - {{env.application}}</span>
+      <span class="env-status" [ngClass]="env | envstatus">{{env | envstatus}}</span>
+   </div>
+</div>
+<div>
+  <div *ngIf="!collapsed">
+    <div><a (click)="openTerminal(env)">Open Terminal</a></div>
+    <div *ngIf="env.controllable"><a (click)="startServer(env)">Start Server</a></div>
+    <div *ngIf="env.controllable"><a (click)="stopServer(env)">Stop Server</a></div>
+    <div><a (click)="startTail(env)">Start Tail</a></div>
+    <div><a (click)="stopTail(env)">Stop Tail</a></div>
+  </div>
+  <div *ngIf="!collapsed">
+    <div *ngFor="let loggable of env.loggables">
+      {{loggable.application}}: {{loggable.logcount}}
+    </div>
+  </div>
+  <div *ngIf="env.supportsHotdeploy && !collapsed" ng2FileDrop [ngClass]="env | envstatus"
+  		[uploader]="uploader"
+        class="well my-drop-zone hasBaseDropZoneOver">
+    Drop Archives here ...
+  </div>
+</div>

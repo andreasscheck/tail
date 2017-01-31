@@ -1,0 +1,13 @@
+<div>
+  <app-navitem heading="Search and find">
+      <app-debounced-input delay="500" placeholder="Search..." (value)="filter($event)"></app-debounced-input>
+      <app-debounced-input delay="500" placeholder="Highlight..." (value)="highlight($event)"></app-debounced-input>
+      <app-debounced-input delay="500" placeholder="Beep on..." (value)="beepOn($event)"></app-debounced-input>
+  </app-navitem>
+  <app-navitem heading="Control Center">
+    <input type="button" (click)="stopTails()" value="Stop all tails">
+    <div *ngFor="let env of environments | envSorter" style="margin-bottom: 10px;">
+      <app-environment [env]="env"></app-environment>
+    </div>
+  </app-navitem>
+</div>

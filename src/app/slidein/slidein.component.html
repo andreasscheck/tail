@@ -1,0 +1,8 @@
+<div class="slidein">
+  <div (click)="togglevisibility()" class="clickhandler">
+    {{heading}}
+  </div>
+  <div class="content" [ngClass]="{isCollapsed: collapsed, notCollapsed: !collapsed}">
+    <ng-content></ng-content>
+  </div>
+</div>

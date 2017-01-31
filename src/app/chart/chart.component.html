@@ -1,0 +1,17 @@
+<div>
+  <button (click)="redraw()">Redraw Chart</button>
+  <button (click)="reset()">Reset</button>
+  <input type="checkbox" [(ngModel)]="useFilteredLogs" (change)="redraw()"> Filtered
+</div>
+<div>
+  <div style="width: 500px; display: inline-block; float: left;">
+    <div class='row' id='dc-time-chart'></div>
+    <div class='row' id='dc-volume-chart'></div>
+  </div>
+
+  <div style="display: inline-block;"><div style="text-align: center;">Level</div><div id='dc-pie-chart'></div></div>
+  <div style="display: inline-block;"><div style="text-align: center;">Logfile</div><div id='dc-pie-chart5'></div></div>
+  <div style="display: inline-block;"><div style="text-align: center;">Application</div><div id='dc-pie-chart2'></div></div>
+  <div style="display: inline-block;"><div style="text-align: center;">Environment</div><div id='dc-pie-chart4'></div></div>
+  <div style="display: inline-block;"><div style="text-align: center;">Customer</div><div id='dc-pie-chart3'></div></div>
+</div>
