@@ -38,7 +38,15 @@ export class SystemMonitorService {
         }
       }
     });
+    this._backend.subscribeConnectionStatus().subscribe((status: number) => {
+      switch (status) {
+        case 2:
+          this.getConfig();
+      }
+    });
+  }
 
+  private getConfig() {
     this._backend.getConfig().subscribe(res => {
       let envkey: string, appname: string, envObj: any, env: Environment, logfile: string, loggable: Loggable;
       for (envkey in res) {

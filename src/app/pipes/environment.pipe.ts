@@ -6,7 +6,7 @@ import { Environment } from '../model/environment';
   name: 'envstatus'
 })
 export class EnvironmentPipe implements PipeTransform {
-  transform (value: Environment, args:string[]): string {
+  transform (value: Environment, args: string[]): string {
     switch (value.status) {
       case 0:
         return 'Unknown';

@@ -1,0 +1,60 @@
+.slidein {
+	z-index: 10000;
+	position: absolute;
+}
+
+.slidein .clickhandler {
+  overflow: hidden;
+	cursor: pointer;
+	background-color: lightgray;
+	text-align: center;
+}
+
+.slidein .content {
+	background-color: white;
+	transition: all 0.5s;
+}
+
+.slidein.bottom {
+	width: 100%;
+	bottom: 0px;
+}
+
+.slidein.bottom .clickhandler {
+	width: 100%;
+	height: 20px;
+}
+
+.slidein.bottom .content {
+	height: 0px;
+	overflow: auto;
+}
+
+.slidein.bottom:hover .content {
+	height: 300px;
+}
+
+
+.slidein.right {
+  display: block;
+  overflow: hidden;
+	height: 100%;
+	right: 0px;
+	top: 0px;
+}
+
+.slidein.right .clickhandler {
+  float: left;
+	width: 20px;
+	height: 100%;
+}
+
+.slidein.right .content {
+  overflow: hidden;
+	width: 0px;
+	height: 100%;
+}
+
+.slidein.right:hover .content {
+	width: 250px;
+}

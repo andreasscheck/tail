@@ -96,8 +96,8 @@ export class LogFilter {
 export class LogsFilterPipe implements PipeTransform {
   constructor(private _filter: LogFilter) {}
 
-  transform(items: Log[], args:any[]) : any {
-    var filtered = [],
+  transform(items: Log[], args: any[]): any {
+    let filtered = [],
       filter: Filter = args[0];
     return this._filter.filter(items, filter);
   }
@@ -107,9 +107,9 @@ export class LogsFilterPipe implements PipeTransform {
 export class EnvSorterPipe implements PipeTransform {
   constructor(private _filter: LogFilter) {}
 
-  transform(envs: Environment[], args:any[]) : any {
+  transform(envs: Environment[], args: any[]): any {
     envs.sort(function (a: Environment, b: Environment) {
-      return a.customer !== b.customer ? (a.customer < b.customer ? -1 : 1) : (a.name < b.name ? -1: 1);
+      return a.customer !== b.customer ? (a.customer < b.customer ? -1 : 1) : (a.name < b.name ? -1 : 1);
    });
    return envs;
   }

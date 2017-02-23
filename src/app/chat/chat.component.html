@@ -1,0 +1,2 @@
+<input style="width: 100%;" type="text" (keyup)="$event.keyCode===13 && sendMessage()" [(ngModel)]="messageText" placeholder="message (hit enter to submit)">
+<div class="chatmessage" *ngFor="let message of messages">{{message.date | formatDate: 'HH:mm:ss'}} Uhr von {{message.sender}}: <p>{{message.message}}</p></div>

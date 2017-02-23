@@ -1,8 +1,10 @@
 <button (click)="scrollDown()">Down</button>
 <button (click)="scrollUp()">Up</button>
 <button (click)="scrollTop()">Top</button>
-<app-debounced-input returntype="int" delay="500" placeholder="Max entries..." [inputValue]="limit" (value)="limit = $event"></app-debounced-input>
-{{ (offset === -1 ? tableData.length - limit : offset) | mathmax: {alt: 0} }} ... {{offset === -1 ? tableData.length : offset + limit}} von {{tableData.length}}
+<app-debounced-input style="display: inline-block;" label="Rows: " returntype="int" delay="500" placeholder="Max entries..." [inputValue]="limit" (value)="limit = $event"></app-debounced-input>
+<div *ngIf="tableData">
+	{{ (offset === -1 ? tableData.length - limit : offset) | mathmax: {alt: 0} }} ... {{offset === -1 ? tableData.length : offset + limit}} von {{tableData.length}}
+</div>
 <table class="table table-striped" style="width: 100%;">
   <thead>
       <tr>
@@ -15,7 +17,6 @@
       </tr>
   </thead>
   <tbody>
-    <tr *ngIf="tableData.length == 0"><td colspan="6" style="text-align: center;">No data so far ...</td></tr>
     <tr *ngFor="let log of tableData | limitTo: {'limit': limit, 'offset': offset}">
         <td style="width: 120px; overflow: hidden;" class="customer" [ngClass]="log.environment.customer">
            <div class="logo"></div>

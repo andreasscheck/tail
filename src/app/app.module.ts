@@ -26,6 +26,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MathMinPipe, MathMaxPipe } from './pipes/math.pipe';
 import { CommonModule } from '@angular/common';
 import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module';
+import { ChatComponent } from './chat/chat.component';
+import { SettingsService } from './services/settings.service';
+import { ConnectionStatusPipe } from './pipes/connection-status.pipe';
+import { JobQueueComponent } from './job-queue/job-queue.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +49,10 @@ import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module
     EnvSorterPipe,
     EnvironmentPipe,
     MathMinPipe,
-    MathMaxPipe
+    MathMaxPipe,
+    ChatComponent,
+    ConnectionStatusPipe,
+    JobQueueComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +63,7 @@ import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module
     FormsModule,
     NgbModule.forRoot()
   ],
-  providers: [BackendService, SystemMonitorService, LogPoolService, LogFilter, LimitToPipe],
+  providers: [SettingsService, BackendService, SystemMonitorService, LogPoolService, LogFilter, LimitToPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

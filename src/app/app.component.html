@@ -1,3 +1,19 @@
+<modal (onClose)="saveSettings();" #settingsmodal>
+   <modal-header [show-close]="true">
+       <h4 class="modal-title">Settings</h4>
+   </modal-header>
+   <modal-body *ngIf="settings">
+ 	<div class="table">
+      <div><div>IP: </div><div><input type="text" [(ngModel)]="settings.host" style="display: inline-block;"></div></div>
+      <div><div>Port: </div><div><input type="text" [(ngModel)]="settings.port" style="display: inline-block;"></div></div>
+      <div><div>Username: </div><div><input type="text" [(ngModel)]="settings.username" style="display: inline-block;"></div></div>
+    </div>
+   </modal-body>
+   <modal-footer>
+     <button type="button" class="btn btn-default" data-dismiss="modal" (click)="settingsmodal.dismiss()">Close</button>
+     <button type="button" class="btn btn-primary" autofocus (click)="settingsmodal.close()">Save</button>
+   </modal-footer>
+</modal>
 <modal (onClose)="findData(0); sort();" #findmodal>
    <modal-header [show-close]="true">
        <h4 class="modal-title">Search</h4>
@@ -37,7 +53,7 @@
       Existing Sessions:
        <ul>
            <li *ngFor="let session of sessions">
-               <a href="#" (click)="$event.preventDefault(); modalSelected = session">{{  session.name }} ({{session.date  | date: "dd.MM.yy HH:mm:ss"}}), Logs: {{session.logcount}}</a> <a (click)="deleteSession(session.name)">Delete</a>
+               <a href="#" (click)="$event.preventDefault(); modalSelected = session">{{ session.name }} ({{session.date  | date: "dd.MM.yy HH:mm:ss"}}), Logs: {{session.logcount}}</a> <a (click)="deleteSession(session.name)">Delete</a>
            </li>
        </ul>
        <input type='text' [(ngModel)]="sessionname">
@@ -47,21 +63,30 @@
      <button type="button" class="btn btn-primary" autofocus (click)="savemodal.close()">Save</button>
    </modal-footer>
 </modal>
-<div class="header">
-  <button (click)="loadmodal.open()">Load</button>
-  <button (click)="savemodal.open()">Save</button>
-  <button (click)="findmodal.open()">Find</button>
-  <button (click)="clear()">Clear</button>
-  <div class="active-filters" *ngIf="filter">
-	  Aktive Filter:
-	  <div *ngIf="filter.message.length > 0"> Volltextsuche: {{filter.message}}</div>
-	  <div *ngIf="filter.customers.length > 0">Customers: {{filter.customers}}</div>
-	  <div *ngIf="filter.applications.length > 0">Applications: {{filter.applications}}</div>
-	  <div *ngIf="filter.environments.length > 0">Environments: {{filter.environments}}</div>
-	  <div *ngIf="filter.logfiles.length > 0">Logfiles: {{filter.logfiles}}</div>
-	  <div *ngIf="filter.level.length > 0">Level: {{filter.level}}</div>
+<div class="header table">
+	<div>
+		<div>
+		  <button (click)="loadmodal.open()">Load</button>
+		  <button (click)="savemodal.open()">Save</button>
+		  <button (click)="findmodal.open()">Find</button>
+		  <button (click)="getSettings(); settingsmodal.open()">Settings</button>
+		  <button (click)="clear()">Clear</button>
+	  </div>
+	  <div class="active-filters" *ngIf="filter">
+		  Aktive Filter:
+		  <div *ngIf="filter.message.length > 0"> Volltextsuche: {{filter.message}}</div>
+		  <div *ngIf="filter.customers.length > 0">Customers: {{filter.customers}}</div>
+		  <div *ngIf="filter.applications.length > 0">Applications: {{filter.applications}}</div>
+		  <div *ngIf="filter.environments.length > 0">Environments: {{filter.environments}}</div>
+		  <div *ngIf="filter.logfiles.length > 0">Logfiles: {{filter.logfiles}}</div>
+		  <div *ngIf="filter.level.length > 0">Level: {{filter.level}}</div>
+		  <div *ngIf="filter.dateFrom !== -1 || filter.dateTill !== -1">Range: {{filter.dateFrom}} bis {{filter.dateTill}}</div>
+	  </div>
+	  <div>Backend Status: <div class="connectionstatus" [ngClass]="connectionStatus | connectionStatus">{{connectionStatus | connectionStatus}}</div></div>
+	  <div>
+		  Logs: {{allLogs.length}}
+	  </div>
   </div>
-  <span style="float: right;">{{allLogs.length}}</span>
 </div>
 <div class="navigation">
   <app-navigation (patternchanged)="highlightPattern=$event"></app-navigation>
@@ -69,6 +94,9 @@
 <div class="content" style="width: 100%; padding-right: 30px;">
   <app-table [highlightPattern]="highlightPattern"></app-table>
 </div>
+<app-slidein heading="" position="right">
+    <app-job-queue></app-job-queue>
+</app-slidein>
 <app-slidein heading="Charts">
 	<app-chart></app-chart>
 </app-slidein>

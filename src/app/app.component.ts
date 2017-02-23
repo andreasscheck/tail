@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
 import { LogPoolService } from './services/log-pool.service';
 import { Log } from './model/log';
 import { SystemMonitorService } from './services/system-monitor.service';
 import { Environment } from './model/environment';
 import { Filter } from './model/filter';
+import { BackendService } from './services/backend.service';
+import { SettingsService } from './services/settings.service';
 import { Observable } from 'rxjs';
 
 declare var moment: any;
@@ -15,22 +17,32 @@ declare var localforage: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  private allLogs: Log[] = [];
-  private sessions: any = [];
-  private sessiondata: any = {};
-  private sessionname: string = '';
-  private queryEnv: string;
-  private dateFrom: any = moment();
-  private dateTill: any = moment();
-  private clearData: boolean = false;
-  private highlightPattern: string;
+export class AppComponent implements OnInit {
+  public allLogs: Log[] = [];
+  public sessions: any = [];
+  public sessiondata: any = {};
+  public sessionname: string = '';
+  public queryEnv: string;
+  public dateFrom: any = moment();
+  public dateTill: any = moment();
+  public clearData: boolean = false;
+  public highlightPattern: string;
   public filter: Filter = new Filter();
-  constructor(private http: Http, private _systemMonitor: SystemMonitorService, private _logService: LogPoolService) {
+  public settings: any;
+  public connectionStatus: number = 0;
+  constructor(private http: Http,
+    private _systemMonitor: SystemMonitorService,
+    private _backendService: BackendService,
+    private _logService: LogPoolService,
+    private settingsService: SettingsService) {
+
     _logService.subscribeFilter().subscribe((filter: Filter) => {
       if (filter) {
         this.filter = filter;
       }
+    });
+    _backendService.subscribeConnectionStatus().subscribe((status: number) => {
+      this.connectionStatus = status;
     });
     _logService.subscribeAllLogs().subscribe((logs: Log[]) => {
       if (logs) {
@@ -46,6 +58,7 @@ export class AppComponent {
       }
     });
   }
+
   ngOnInit() {
     window.onbeforeunload = function(evt) {
       let message = 'Seite wirklich verlassen?';
@@ -56,6 +69,10 @@ export class AppComponent {
     };
   }
 
+  public getSettings() {
+    this.settings = this.settingsService.getSettings();
+  }
+
   private deleteSession(sessionname) {
     let session = this.getSession(sessionname);
     if (session) {
@@ -63,6 +80,9 @@ export class AppComponent {
       localforage.setItem('loggersessions', this.sessions);
       localforage.removeItem('session-' + sessionname);
     }
+  }
+  private saveSettings() {
+    this.settingsService.setSettings(this.settings);
   }
 
   private saveSessionData(value) {
@@ -131,6 +151,7 @@ export class AppComponent {
       search: params
     }).subscribe(res => { });
   }
+
   private sort() {
     this._logService.sort();
   }

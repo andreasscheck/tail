@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Rx';
 })
 export class DebouncedInputComponent {
   @Input() placeholder: string;
+  @Input() label: string;
   @Input() delay: number = 300;
   @Input() returntype: string = 'string';
   @Output() value: EventEmitter<any> = new EventEmitter<any>();
-
   @Input() inputValue: string;
 
   constructor(private elementRef: ElementRef) {

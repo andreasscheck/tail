@@ -2,7 +2,7 @@ import {Injectable, OnInit} from '@angular/core';
 import {SystemMonitorService} from './system-monitor.service';
 import {BackendService} from './backend.service';
 import {Log} from '../model//log';
-import {LogFilter} from '../pipes/log-filter.pipe'
+import {LogFilter} from '../pipes/log-filter.pipe';
 import {Filter} from '../model/filter';
 import {Observer, Observable, BehaviorSubject} from 'rxjs/Rx';
 import {asObservable} from '../util/asObservable';
@@ -89,39 +89,49 @@ export class LogPoolService {
     if (this._filter.level.length !== filter.level.length) {
       this._filter.level = [];
       for (key in filter.level) {
-        this._filter.level.push(filter.level[key]);
+        if (filter.level.hasOwnProperty(key)) {
+          this._filter.level.push(filter.level[key]);
+        }
       }
       levelSearch = true;
     }
     if (this._filter.applications.length !== filter.applications.length) {
       this._filter.applications = [];
       for (key in filter.applications) {
-        this._filter.applications.push(filter.applications[key]);
+        if (filter.applications.hasOwnProperty(key)) {
+          this._filter.applications.push(filter.applications[key]);
+        }
       }
       applicationSearch = true;
     }
     if (this._filter.environments.length !== filter.environments.length) {
       this._filter.environments = [];
       for (key in filter.environments) {
-        this._filter.environments.push(filter.environments[key]);
+        if (filter.environments.hasOwnProperty(key)) {
+          this._filter.environments.push(filter.environments[key]);
+        }
       }
       envSearch = true;
     }
     if (this._filter.customers.length !== filter.customers.length) {
       this._filter.customers = [];
       for (key in filter.customers) {
-        this._filter.customers.push(filter.customers[key]);
+        if (filter.customers.hasOwnProperty(key)) {
+          this._filter.customers.push(filter.customers[key]);
+        }
       }
       customerSearch = true;
     }
     if (this._filter.logfiles.length !== filter.logfiles.length) {
       this._filter.logfiles = [];
       for (key in filter.logfiles) {
-        this._filter.logfiles.push(filter.logfiles[key]);
+        if (filter.logfiles.hasOwnProperty(key)) {
+          this._filter.logfiles.push(filter.logfiles[key]);
+        }
       }
       logfileSearch = true;
     }
-    if(customerSearch || applicationSearch || levelSearch || rangeSearch || messageSearch || envSearch || logfileSearch) {
+    if (customerSearch || applicationSearch || levelSearch || rangeSearch || messageSearch || envSearch || logfileSearch) {
       this.filter();
     }
   }
@@ -135,7 +145,9 @@ export class LogPoolService {
   public addSessionData(logs: Log[]) {
     let key;
     for (key in logs) {
-      this._allLogs.push(logs[key]);
+      if (logs.hasOwnProperty(key)) {
+        this._allLogs.push(logs[key]);
+      }
     }
     this.filter();
   }

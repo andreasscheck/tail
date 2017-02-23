@@ -214,10 +214,12 @@ export class ChartComponent implements OnInit {
     this.resetData();
     this.facts.add(this.cdata);
 
-    this.timeChart
-        .x(d3.time.scale().domain(d3.extent(this.cdata, function(d) { return d.dtg; })));
     this.volumeChart
         .x(d3.time.scale().domain(d3.extent(this.cdata, function(d) { return d.dtg; })));
+
+    this.timeChart
+        .x(d3.time.scale().domain(d3.extent(this.cdata, function(d) { return d.dtg; })));
+
     dc.redrawAll();
   }
 
@@ -227,23 +229,25 @@ export class ChartComponent implements OnInit {
         pieChart1Filters = this.pieChart.filters(),
         pieChart2Filters = this.pieChart2.filters(),
         pieChart3Filters = this.pieChart3.filters(),
-        pieChart5Filters = this.pieChart5.filters(),
-        pieChart4Filters = this.pieChart4.filters();
+        pieChart4Filters = this.pieChart4.filters(),
+        pieChart5Filters = this.pieChart5.filters();
 
       dc.filterAll();
 
       this.facts.remove();
 
       this.timeChart.filter([timeChartFilters]);
-      console.log(volumeChartFilters);
+
       if (volumeChartFilters.length === 1) {
-          this.timeChart.filter(dc.filters.RangedFilter(volumeChartFilters[0][0], volumeChartFilters[0][1]));
+          this.volumeChart.filter(dc.filters.RangedFilter(volumeChartFilters[0][0], volumeChartFilters[0][1]));
       }
+
       this.pieChart.filter([pieChart1Filters]);
       this.pieChart2.filter([pieChart2Filters]);
       this.pieChart3.filter([pieChart3Filters]);
       this.pieChart4.filter([pieChart4Filters]);
       this.pieChart5.filter([pieChart5Filters]);
+
   }
 
   reset() {

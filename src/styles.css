@@ -11,6 +11,10 @@ div.active-filters > div {
 	font-size: 10px;
 }
 
+div.chatmessage {
+	font-size: 12px;
+}
+
 div.customer .name {
    text-indent: 20px;
    max-width: 200px;
@@ -32,41 +36,13 @@ div.customer .env-status {
    font-weight: bold;
    float: right;
 }
-
+	
 div.customer .Online.env-status {
   color: green !important;
 }
 
 div.customer .Offline.env-status {
   color: red !important;
-}
-
-.slidein  .content.isCollapsed {
-  display: none;
-}
-.slidein  .content.notCollapsed {
-  display: block;
-  height: 300px;
-}
-
-.slidein {
-  position: fixed;
-  z-index: 10000;
-  width: 100%;
-  bottom: 0px;
-}
-
-.slidein .clickhandler {
-  text-align: center;
-  cursor: pointer;
-  background-color: lightgray;
-  width: 100%;
-  height: 20px;
-}
-
-.slidein .content {
-  width: 100%;
-  background-color: white;
 }
 
 .form-control {
@@ -180,4 +156,8 @@ div.heading {
 
 .highlight {
 	color: red;
+}
+
+input {
+	margin: 2px 0 !important;
 }

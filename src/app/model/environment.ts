@@ -18,10 +18,12 @@ export class Environment {
 
   public addLoggable(application: string): Loggable {
     let key, loggable: Loggable;
-    for(key in this.loggables) {
-      loggable = this.loggables[key];
-      if(loggable.application === application) {
-        return loggable;
+    for (key in this.loggables) {
+      if (this.loggables.hasOwnProperty(key)) {
+        loggable = this.loggables[key];
+        if (loggable.application === application) {
+          return loggable;
+        }
       }
     }
     loggable = new Loggable(this);
@@ -32,10 +34,12 @@ export class Environment {
 
   getLoggable(application: string): Loggable {
     let key, loggable: Loggable;
-    for(key in this.loggables) {
-      loggable = this.loggables[key];
-      if(loggable.application === application) {
-        return loggable;
+    for (key in this.loggables) {
+      if (this.loggables.hasOwnProperty(key)) {
+        loggable = this.loggables[key];
+        if (loggable.application === application) {
+          return loggable;
+        }
       }
     }
     return null;
@@ -80,7 +84,7 @@ export class Environment {
   set application(application: string) {
     this._application = application;
  }
-  get status() : number {
+  get status(): number {
     return this._status;
   }
 

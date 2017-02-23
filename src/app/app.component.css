@@ -1,0 +1,27 @@
+.table {
+	display: table;
+}
+
+.table>div {
+	display: table-row;
+}
+
+.table>div>div {
+	display: table-cell;
+}
+
+.connectionstatus {
+	font-weight: bold;
+}
+
+.Connected {
+	color: green;
+}
+
+.Disconnected {
+	color: red;
+}
+
+.Connecting {
+	color: black;
+}

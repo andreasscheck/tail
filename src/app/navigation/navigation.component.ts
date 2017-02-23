@@ -15,19 +15,21 @@ export class NavigationComponent {
 
   private collapsed: boolean = false;
 
-  private environments : Environment[] = [];
+  private environments: Environment[] = [];
 
-  private hightlightPattern: string = "";
+  private hightlightPattern: string = '';
 
   constructor(private _backend: BackendService, private _logpool: LogPoolService, private _systemMonitor: SystemMonitorService) {
     _systemMonitor.envs.subscribe((envs: Environment[]) => {
       this.environments = envs;
-    })
+    });
   }
 
   stopTails() {
-    for(let key in this.environments) {
-      this._backend.stopTail(this.environments[key]);
+    for (let key in this.environments) {
+      if ( this.environments.hasOwnProperty(key)) {
+        this._backend.stopTail(this.environments[key]);
+      }
     }
   }
   filter(value) {
@@ -37,13 +39,13 @@ export class NavigationComponent {
         filter = this._logpool.getFilter();
         filter.message = value;
         this._logpool.applyFilter(filter);
-    } catch(ignore) {}
+    } catch (ignore) {}
   }
   highlight(value) {
     try {
         new RegExp(value);
         this.patternchanged.emit(value);
-    } catch(ignore) {}
+    } catch (ignore) {}
   }
 
   beepOn(value) {

@@ -13,12 +13,11 @@ type ObservableLogs = Observable<Log[]>
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent {
-
-  @Input() private highlightPattern: string = '';
-  private tableData: Log[] = [];
-  private offset: number = -1;
-  private limit: number = 20;
-  private viewConfig = {
+  @Input() public highlightPattern: string = '';
+  public tableData: Log[] = [];
+  public offset: number = -1;
+  public limit: number = 20;
+  public viewConfig = {
     logger: true,
     product: false,
     keyValues: false,

@@ -1,7 +1,7 @@
 import {Loggable} from './loggable';
 
 export class Filter {
-  private _message: string = "";
+  private _message: string = '';
   private _customers: string[] = [];
   private _applications: string[] = [];
   private _environments: string[] = [];
@@ -9,9 +9,6 @@ export class Filter {
   private _level: string[] = [];
   private _dateFrom: number = -1;
   private _dateTill: number = -1;
-
-  constructor() {
-  }
 
   static copy(source: Filter): Filter {
     let filter = new Filter(), key;
@@ -23,11 +20,18 @@ export class Filter {
     filter.dateTill = source.dateTill;
     filter.environments = source.environments;
 
-    for(key in source.level) {
-      filter.level.push(source.level[key]);
+    for (key in source.level) {
+      if (source.level.hasOwnProperty(key)) {
+        filter.level.push(source.level[key]);
+      }
     }
     return filter;
   }
+
+  constructor() {
+  }
+
+
 
   set message(message: string) {
     this._message = message;

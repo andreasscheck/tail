@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class SlideinComponent {
   @Input() heading: string;
+  @Input() position: string = 'bottom';
 
   private collapsed: boolean = true;
 

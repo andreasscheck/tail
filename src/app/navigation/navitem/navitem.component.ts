@@ -7,10 +7,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class NavitemComponent {
   @Input() heading: string;
-  @Input() visible: string = "shownav";
+  @Input() visible: string = 'shownav';
   constructor() {
   }
   toggle() {
-    this.visible = (this.visible === "shownav") ? 'hidenav' : 'shownav';
+    this.visible = (this.visible === 'shownav') ? 'hidenav' : 'shownav';
   }
 }

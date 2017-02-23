@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Observer, Observable, BehaviorSubject } from 'rxjs/Rx';
 import { Environment } from '../model/environment';
 import { Log } from '../model/log';
+import { Message } from '../model/message';
 import { Http } from '@angular/http';
-import { asObservable } from "../util/asObservable";
+import { asObservable } from '../util/asObservable';
 import { LogFilter } from '../pipes/log-filter.pipe';
+import { SettingsService } from './settings.service';
 
 @Injectable()
 export class BackendService {
@@ -13,17 +15,34 @@ export class BackendService {
 
   private _logSubject: BehaviorSubject<Log> = new BehaviorSubject(null);
   private _hcSubject: BehaviorSubject<Environment> = new BehaviorSubject(null);
-  private _chatSubject: BehaviorSubject<string> = new BehaviorSubject(null);
+  private _chatSubject: BehaviorSubject<Message> = new BehaviorSubject(null);
+  private _connectionStatusSubject: BehaviorSubject<number> = new BehaviorSubject(null);
 
-  private reconnectionInterval: number = 5000
+  private reconnectionInterval: number = 5000;
   private connectionTimer: any;
   private subscription: any;
   private connected: boolean = false;
 
-  constructor(private _http: Http, private _logsFilter: LogFilter) {
-    this.reconnect();
+  private host: string = 'localhost';
+  private port: number = 16060;
+
+  constructor(private _http: Http, private _logsFilter: LogFilter, private settingsService: SettingsService) {
+    this.settingsService.subscribeSettings().subscribe((settings: any) => {
+      if (settings) {
+        this.host = settings.host;
+        this.port = parseInt(settings.port, 10);
+        this.disconnect();
+        this.reconnect();
+      }
+    });
   }
 
+  private disconnect() {
+    if (this._ws && this._ws.readyState === WebSocket.OPEN) {
+      this._connectionStatusSubject.next(0);
+      this._ws.close();
+    }
+  }
   private reconnect() {
     if (!this._ws || this._ws.readyState === WebSocket.CLOSED) {
       this.connect();
@@ -34,21 +53,29 @@ export class BackendService {
   }
 
   private connect() {
-    console.log("connecting ...");
-    this._ws = new WebSocket('ws://10.1.3.177:16060/chat');
-    this._ws.onmessage = (event: MessageEvent) => {
-      this.onmessage(event);
-    }
-    this._ws.onopen = (event: Event) => {
-      console.log("connection established ");
-      this.connected = true;
-    }
-    this._ws.onclose = (event: Event) => {
-      console.log("connection lost");
-      this.connected = false;
+    try {
+      this._ws = new WebSocket('ws://' + this.host + ':' + this.port + '/chat');
+      this._connectionStatusSubject.next(1);
+      this._ws.onmessage = (event: MessageEvent) => {
+        this.onmessage(event);
+      };
+      this._ws.onopen = (event: Event) => {
+        this._connectionStatusSubject.next(2);
+        this.connected = true;
+      };
+      this._ws.onclose = (event: Event) => {
+        console.log('connection lost');
+        this._connectionStatusSubject.next(0);
+        this.connected = false;
+      };
+    } catch (e) {
+      this._connectionStatusSubject.next(0);
     }
   }
 
+  public subscribeConnectionStatus(): Observable<number> {
+    return asObservable(this._connectionStatusSubject);
+  }
   public subscribeLogs(): Observable<Log> {
     return asObservable(this._logSubject);
   }
@@ -57,7 +84,7 @@ export class BackendService {
     return asObservable(this._hcSubject);
   }
 
-  public subscribeChat(): Observable<string> {
+  public subscribeChat(): Observable<Message> {
     return asObservable(this._chatSubject);
   }
 
@@ -86,8 +113,23 @@ export class BackendService {
     this.send(cmd);
   }
 
+  public sendChatMessage(message: String) {
+    let settings = this.settingsService.getSettings(),
+      cmd = {
+        'type': 'chat',
+        'message': {
+          'message': message,
+          'sender': settings.username,
+          'date': new Date().getTime()
+        }
+      };
+    this.send(cmd);
+  }
+
   private send(msg: any) {
-    this._ws.send(JSON.stringify(msg));
+    if (this._ws && this._ws.readyState === WebSocket.OPEN) {
+      this._ws.send(JSON.stringify(msg));
+    }
   }
 
   public onmessage: (ev: MessageEvent) => void = function(event: MessageEvent) {
@@ -118,6 +160,7 @@ export class BackendService {
 
         payload.environment = new Environment(log.environment);
         if (log.message.level === 'CHAT') {
+          this._chatSubject.next(new Message(log.message.message.message, new Date(log.message.message.date), log.message.message.sender));
         } else if (log.message.level === 'HEALTHSTATUS') {
           for (key in log.message.message) {
             if (log.message.message.hasOwnProperty(key)) {
@@ -126,6 +169,8 @@ export class BackendService {
               this._hcSubject.next(env);
             }
           }
+        } else if (log.message.level === 'JOBQUEUE') {
+          console.log(log.message.message);
         } else {
           payload.application = log.application;
           payload.level = log.message.level;
@@ -139,6 +184,7 @@ export class BackendService {
   };
 
   getConfig() {
-    return this._http.get('http://10.1.3.177:16060/config').map(res => res.json());
+    console.log('http://' + this.host + ':' + this.port + '/config');
+    return this._http.get('http://' + this.host + ':' + this.port + '/config').map(res => res.json());
   }
 }

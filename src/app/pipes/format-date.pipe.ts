@@ -6,7 +6,7 @@ declare var moment;
   name: 'formatDate'
 })
 export class FormatDatePipe implements PipeTransform {
-  transform(date: any, format: String) : any {
+  transform(date: any, format: String): any {
     return moment(date).format(format);
   }
 }
